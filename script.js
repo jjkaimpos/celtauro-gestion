@@ -67,11 +67,53 @@ navLinks.forEach(link => {
 // URL DEL CSV: Usa la URL pública de tu hoja de Google Sheets
 const CUOTAS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTf6SEVJ_oWyi5qxO9oy6AXKzyJqv5SwIJIIN1U7ggO-yI2Pbzk4TfVlsTG0Z2ruzGOhnTquavVossX/pub?gid=0&single=true&output=csv';
 
+// --- Constantes de Cobro para Filtro Inteligente (Sep 2025) ---
+const BILLING_START_MONTH = 'Septiembre';
+const BILLING_START_YEAR = 2025;
+const BILLING_MONTHS_ORDER = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+// --- Elementos DOM de Cuotas ---
 const CUOTAS_CONTAINER = document.getElementById('cuotas-full-data-container');
 const PENDING_LIST = document.getElementById('pending-list');
 const VIEW_PAID_BTN = document.getElementById('view-paid-btn');
 const VIEW_PENDING_BTN = document.getElementById('view-pending-btn');
 const INGRESAR_CUOTA_BTN = document.getElementById('ingresar-cuota-btn');
+
+
+/**
+ * Determina qué meses son relevantes para el cobro (desde el inicio hasta el mes actual).
+ */
+function getRelevantMonths() {
+    // Obtenemos la fecha actual para el cálculo
+    const now = new Date();
+    const CURRENT_MONTH = BILLING_MONTHS_ORDER[now.getMonth()];
+    const CURRENT_YEAR = now.getFullYear();
+
+    // Si el año actual es anterior al inicio, no hay meses relevantes.
+    if (CURRENT_YEAR < BILLING_START_YEAR) {
+        return [];
+    }
+
+    const startIdx = BILLING_MONTHS_ORDER.indexOf(BILLING_START_MONTH);
+    const currentIdx = BILLING_MONTHS_ORDER.indexOf(CURRENT_MONTH); 
+    
+    // Si el año actual es el de inicio (2025), empezamos desde Sep hasta el actual.
+    if (CURRENT_YEAR === BILLING_START_YEAR) {
+        // Si el mes actual es anterior al de inicio (ej. Agosto 2025), no hay nada que cobrar.
+        if (currentIdx < startIdx) {
+            return [];
+        }
+        // Devuelve [Septiembre, Octubre]
+        return BILLING_MONTHS_ORDER.slice(startIdx, currentIdx + 1);
+    }
+    
+    // Si el año actual es posterior al de inicio, devolvemos los 12 meses
+    if (CURRENT_YEAR > BILLING_START_YEAR) {
+        return BILLING_MONTHS_ORDER;
+    }
+    
+    return []; // Caso de seguridad
+}
 
 
 // --- PARSEAR CSV ---
@@ -101,18 +143,27 @@ function parseCSV(csvText) {
 }
 
 
-// --- RENDERIZAR RESUMEN DE PENDIENTES ---
+// --- RENDERIZAR RESUMEN DE PENDIENTES (Inteligente) ---
 function renderCuotasSummary(data) {
-    // Meses clave para buscar el estado (debes asegurar que estos coincidan con tu CSV)
-    const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    // Usamos la función utilitaria para obtener solo los meses cobrables (Sep 2025 en adelante)
+    const RELEVANT_MONTHS = getRelevantMonths(); 
     
     let pendingHTML = '';
     let foundPending = false;
+    
+    if (RELEVANT_MONTHS.length === 0) {
+        PENDING_LIST.innerHTML = '<li style="background-color: #2ECC71;">¡El periodo de cobro aún no ha comenzado!</li>';
+        return;
+    }
 
     data.forEach(member => {
-        for (const month of MONTHS) {
+        const memberName = member['Miembro'] || 'Miembro Desconocido'; 
+        
+        // Solo iteramos sobre los meses relevantes: Septiembre y Octubre (en este caso)
+        for (const month of RELEVANT_MONTHS) { 
+            // Comprobamos si la columna del mes existe y es "PENDIENTE"
             if (member[month] && member[month].toUpperCase() === 'PENDIENTE') {
-                pendingHTML += `<li>${member['Miembro']} - ${month}</li>`;
+                pendingHTML += `<li>${memberName} - ${month} ${BILLING_START_YEAR}</li>`;
                 foundPending = true;
                 break; // Muestra solo el primer mes pendiente por miembro
             }
@@ -125,7 +176,7 @@ function renderCuotasSummary(data) {
         PENDING_LIST.innerHTML = '<li style="background-color: #2ECC71;">¡Al día! No hay cuotas pendientes.</li>';
     }
     
-    // Asegurarse de que se muestre el resumen y la tabla completa se oculte
+    // Asegurarse de que se muestre el resumen y la tabla completa se oculte al inicio
     document.getElementById('cuotas-summary-container').classList.remove('hidden');
     CUOTAS_CONTAINER.classList.add('hidden');
 }
@@ -221,24 +272,23 @@ async function loadCuotasData() {
 // 4. LÓGICA DE BOTONES DE CUOTAS
 // ======================================
 
-// --- 1. Lógica del botón de Ingresar Cuota (Google Form) ---
-
-// **¡PEGA AQUÍ EL ENLACE DE TU FORMULARIO DE GOOGLE!**
+// URL del Formulario de Google proporcionada por el usuario
 const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScqxg20O5Lm409muzwF8xASn2KzNmIlcOEQHJC6j6O_LX9OCg/viewform?usp=header'; 
 
 INGRESAR_CUOTA_BTN.addEventListener('click', function() {
+    // Abre el formulario en una nueva pestaña
     window.open(GOOGLE_FORM_URL, '_blank');
 });
 
 
-// --- 2. Lógica de los botones de Filtrado de la Tabla ---
+// --- Lógica de los botones de Filtrado de la Tabla ---
 
 VIEW_PAID_BTN.addEventListener('click', function() {
     // 1. Ocultar el resumen y mostrar el contenedor de la tabla
     document.getElementById('cuotas-summary-container').classList.add('hidden');
     CUOTAS_CONTAINER.classList.remove('hidden'); 
     
-    // 2. Renderizar la tabla, FILTRANDO a solo PAGADO
+    // 2. Renderizar la tabla, FILTRANDO a solo PAGADO (atenúa pendientes)
     renderFullTable(cuotasData, 'PAGADO'); 
 });
 
@@ -247,6 +297,12 @@ VIEW_PENDING_BTN.addEventListener('click', function() {
     document.getElementById('cuotas-summary-container').classList.add('hidden');
     CUOTAS_CONTAINER.classList.remove('hidden'); 
     
-    // 2. Renderizar la tabla, FILTRANDO a solo PENDIENTE
+    // 2. Renderizar la tabla, FILTRANDO a solo PENDIENTE (atenúa pagados)
     renderFullTable(cuotasData, 'PENDIENTE'); 
+});
+
+// Inicializar la primera sección
+document.addEventListener('DOMContentLoaded', function() {
+    // Nos aseguramos de que empiece en la sección de inicio
+    showSection('inicio');
 });
