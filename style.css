@@ -217,7 +217,7 @@ body {
 }
 
 /* -------------------------------------- */
-/* 7. ESTILO DE TABLA DE CUOTAS (ANTERIOR) */
+/* 7. ESTILO DE TABLA DE CUOTAS (GENERAL) */
 /* -------------------------------------- */
 
 .cuotas-table {
@@ -244,13 +244,13 @@ body {
 }
 
 .status-pagado {
-    background-color: #2ECC71; 
+    background-color: #2ECC71; /* Verde esmeralda para PAGADO */
     color: var(--color-fondo-principal);
     font-weight: bold;
 }
 
 .status-pendiente {
-    background-color: #E74C3C; 
+    background-color: #E74C3C; /* Rojo ladrillo para PENDIENTE */
     color: var(--color-texto-claro);
     font-weight: bold;
 }
@@ -264,7 +264,7 @@ body {
 /* -------------------------------------- */
 
 .hidden {
-    display: none !important; /* Clase crucial para ocultar la tabla de datos completa al inicio */
+    display: none !important; /* Clase crucial para ocultar */
 }
 
 .button-group-triple {
@@ -297,10 +297,24 @@ body {
 
 #pending-list li {
     background-color: var(--color-fondo-principal);
-    border: 1px solid var(--color-acento-brillante); /* Borde turquesa para destacar */
+    border: 1px solid var(--color-acento-brillante); 
     padding: 10px;
     margin-bottom: 8px;
     border-radius: 4px;
     text-align: center;
     font-weight: bold;
+}
+
+/* -------------------------------------- */
+/* 9. ESTILO PARA FILTRADO DE TABLA */
+/* -------------------------------------- */
+
+/* Atenúa las celdas de Pagado cuando se pide el filtro Pendiente */
+#cuotas-full-data-container[data-filter="PENDIENTE"] .status-pagado {
+    opacity: 0.3; 
+}
+
+/* Atenúa las celdas de Pendiente cuando se pide el filtro Pagado */
+#cuotas-full-data-container[data-filter="PAGADO"] .status-pendiente {
+    opacity: 0.3; 
 }
