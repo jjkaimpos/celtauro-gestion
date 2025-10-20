@@ -224,7 +224,7 @@ async function loadCuotasData() {
 // --- 1. Lógica del botón de Ingresar Cuota (Google Form) ---
 
 // **¡PEGA AQUÍ EL ENLACE DE TU FORMULARIO DE GOOGLE!**
-const GOOGLE_FORM_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTf6SEVJ_oWyi5qxO9oy6AXKzyJqv5SwIJIIN1U7ggO-yI2Pbzk4TfVlsTG0Z2ruzGOhnTquavVossX/pub?gid=0&single=true&output=csv'; 
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScqxg20O5Lm409muzwF8xASn2KzNmIlcOEQHJC6j6O_LX9OCg/viewform?usp=header'; 
 
 INGRESAR_CUOTA_BTN.addEventListener('click', function() {
     window.open(GOOGLE_FORM_URL, '_blank');
