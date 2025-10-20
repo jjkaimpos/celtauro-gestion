@@ -220,3 +220,48 @@ body {
     top: 50%;
     transform: translateY(-50%);
 }
+
+/* -------------------------------------- */
+/* 7. ESTILO DE TABLA DE CUOTAS (RESPONSIVE) */
+/* -------------------------------------- */
+
+.cuotas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9em; 
+    background-color: #34495E; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.cuotas-table th, .cuotas-table td {
+    border: 1px solid var(--color-fondo-principal); 
+    padding: 10px;
+    text-align: center;
+}
+
+.cuotas-table th {
+    background-color: var(--color-acento-secundario); 
+    color: var(--color-acento-brillante); 
+    font-family: var(--font-titulo);
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+/* Estilos específicos para los estados de pago */
+.status-pagado {
+    background-color: #2ECC71; /* Verde esmeralda para PAGADO */
+    color: var(--color-fondo-principal);
+    font-weight: bold;
+}
+
+.status-pendiente {
+    background-color: #E74C3C; /* Rojo ladrillo para PENDIENTE */
+    color: var(--color-texto-claro);
+    font-weight: bold;
+}
+
+/* Para mejorar la visibilidad de las filas */
+.cuotas-table tr:nth-child(even) {
+    background-color: #2C3E50; /* Alterna el fondo para mejor lectura */
+}

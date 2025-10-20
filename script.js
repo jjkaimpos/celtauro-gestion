@@ -66,10 +66,51 @@ const CUOTAS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTf6SEVJ
 
 const CUOTAS_CONTAINER = document.getElementById('cuotas-table-container');
 
-// **FUNCIÓN PENDIENTE DE DEFINIR** (Solo está declarada, pero es necesaria)
+// Función que toma el texto CSV y lo renderiza como una tabla HTML
 function renderCuotasTable(csvText) {
-    // ESTA FUNCIÓN ESTÁ VACÍA AÚN. LA HAREMOS AHORA.
-    CUOTAS_CONTAINER.innerHTML = '<p>✅ Datos CSV leídos. Preparando la tabla...</p>';
+    // 1. Divide el texto en filas y columnas
+    const rows = csvText.trim().split('\n');
+    const tableHTML = document.createElement('table');
+    tableHTML.className = 'cuotas-table'; // Clase para aplicar el estilo CSS
+
+    // Usamos una cabecera separada para aplicar estilos
+    const thead = tableHTML.createTHead();
+    const tbody = tableHTML.createTBody();
+
+    rows.forEach((row, index) => {
+        // Expresión regular para separar por comas, manejando celdas con comas internas si fuera necesario
+        const cells = row.match(/(?:[^,"]+|"(?:\\.|[^"])*")+/g);
+
+        if (!cells) return; // Salta filas vacías
+
+        const target = (index === 0) ? thead.insertRow() : tbody.insertRow();
+        
+        cells.forEach(cellText => {
+            // Limpia las comillas si existen y los espacios al principio/final
+            const cleanText = cellText.replace(/"/g, '').trim();
+
+            let cellElement;
+            if (index === 0) {
+                // Primera fila: Encabezados (<th>)
+                cellElement = document.createElement('th');
+            } else {
+                // Resto de filas: Celdas de datos (<td>)
+                cellElement = target.insertCell();
+                
+                // LÓGICA DE ESTADO (PENDIENTE/PAGADO) para aplicar color
+                if (cleanText.toUpperCase() === 'PENDIENTE') {
+                    cellElement.classList.add('status-pendiente');
+                } else if (cleanText.toUpperCase() === 'PAGADO') {
+                    cellElement.classList.add('status-pagado');
+                }
+            }
+            cellElement.textContent = cleanText;
+        });
+    });
+
+    // 2. Insertar la tabla en el contenedor
+    CUOTAS_CONTAINER.innerHTML = ''; // Limpia el mensaje de "Cargando..."
+    CUOTAS_CONTAINER.appendChild(tableHTML);
 }
 
 // Función principal para cargar y mostrar los datos
