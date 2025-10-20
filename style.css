@@ -1,0 +1,222 @@
+/* -------------------------------------- */
+/* 1. VARIABLES Y RESET BÁSICO */
+/* -------------------------------------- */
+:root {
+    /* Paleta de Celtauro */
+    --color-fondo-principal: #2C3E50; /* Gris Acero Oscuro (Fondo) */
+    --color-texto-claro: #ECF0F1;     /* Gris muy claro / Plata (Texto) */
+    --color-acento-brillante: #4DEDF9; /* Turquesa (Acentos/Enlaces) */
+    --color-acento-secundario: #607D8B; /* Gris Azulado (Hover/Botones/Sombra) */
+
+    /* Tipografía */
+    --font-titulo: 'Cinzel', serif;
+    --font-cuerpo: 'Roboto', sans-serif;
+}
+
+/* Reset básico para eliminar márgenes por defecto */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-fondo-principal);
+    color: var(--color-texto-claro);
+    font-family: var(--font-cuerpo);
+    line-height: 1.6;
+    padding-top: 60px; /* Espacio para que el header fijo no tape el contenido */
+}
+
+/* -------------------------------------- */
+/* 2. CABECERA Y LOGO (Fija en móvil) */
+/* -------------------------------------- */
+#main-header {
+    background-color: #1C2833; /* Un tono aún más oscuro para la cabecera */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    position: fixed; /* Fija la cabecera al tope de la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+    max-height: 40px; /* Tamaño del logo en móvil */
+    width: auto;
+}
+
+/* -------------------------------------- */
+/* 3. MENÚ HAMBURGUESA Y NAVEGACIÓN (MOBILE-FIRST) */
+/* -------------------------------------- */
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--color-acento-brillante);
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+#main-nav {
+    position: fixed;
+    top: 60px; /* Justo debajo de la cabecera */
+    left: 0;
+    width: 100%;
+    background-color: #1C2833; 
+    z-index: 999;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Clase para ocultar el menú por defecto en móvil */
+.nav-hidden {
+    transform: translateY(-100%);
+}
+
+#main-nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+#main-nav li {
+    border-bottom: 1px solid var(--color-acento-secundario);
+}
+
+#main-nav a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: var(--color-texto-claro);
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+}
+
+#main-nav a:hover {
+    background-color: var(--color-acento-secundario); 
+    color: var(--color-acento-brillante);
+}
+
+/* -------------------------------------- */
+/* 4. ESTILO GENERAL DE CONTENIDO (SPA Feel) */
+/* -------------------------------------- */
+#content {
+    padding: 15px;
+}
+
+/* ESTO ES LO CRUCIAL: OCULTAR TODAS LAS SECCIONES */
+.content-section {
+    display: none; 
+    min-height: calc(100vh - 60px); 
+    padding-bottom: 50px; 
+}
+
+/* Esta es la única clase que el JavaScript debe añadir para mostrar una sección */
+.content-section.active {
+    display: block; 
+}
+
+.content-section h2 {
+    font-family: var(--font-titulo);
+    color: var(--color-acento-brillante);
+    text-align: center;
+    margin-bottom: 20px;
+    padding-top: 10px;
+}
+
+.content-section p {
+    text-align: justify;
+    padding: 0 10px;
+}
+
+/* Estilo para la imagen de la página de inicio */
+.band-image-container {
+    text-align: center;
+    margin: 20px 0;
+    overflow: hidden; 
+}
+
+.band-hero-image {
+    width: 100%; 
+    max-width: 500px; 
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(77, 237, 249, 0.5); /* Resaltamos con un brillo turquesa */
+}
+
+
+/* -------------------------------------- */
+/* 5. ESTILO DE BOTONES Y GRUPOS (MIEMBROS) */
+/* -------------------------------------- */
+.button-group {
+    display: flex;
+    justify-content: space-around; 
+    margin-top: 25px;
+    padding: 0 15px; 
+}
+
+.celtauro-btn {
+    padding: 12px 15px;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    border-radius: 8px; /* Esquinas redondeadas */
+    width: 48%; 
+}
+
+.primary-btn {
+    background-color: var(--color-acento-brillante); /* Turquesa Brillante */
+    color: var(--color-fondo-principal); 
+    box-shadow: 0 4px var(--color-acento-secundario); 
+}
+
+.secondary-btn {
+    background-color: var(--color-acento-secundario); 
+    color: var(--color-texto-claro); 
+    box-shadow: 0 4px #455A64;
+}
+
+.celtauro-btn:active {
+    transform: translateY(2px); 
+    box-shadow: 0 2px #455A64;
+}
+
+/* -------------------------------------- */
+/* 6. ESTILO DE LISTAS DE MIEMBROS */
+/* -------------------------------------- */
+
+#miembros-list {
+    list-style: none; 
+    padding: 0;
+    margin: 20px 0;
+}
+
+#miembros-list li {
+    background-color: #34495E; 
+    border: 1px solid var(--color-acento-secundario); 
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    font-size: 1.1em;
+    position: relative;
+    padding-left: 35px; 
+}
+
+#miembros-list li::before {
+    content: "•"; 
+    color: var(--color-acento-brillante); 
+    font-size: 2em;
+    line-height: 0.5;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}

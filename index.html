@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celtauro | Gestión Interna</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="logo-container">
+            <img src="Logo piedra transparente.png" alt="Logo Celtauro" class="logo">
+        </div>
+
+        <button id="menu-toggle" class="menu-toggle">
+            <span class="icon-bar">☰</span>
+        </button>
+    </header>
+
+    <nav id="main-nav" class="nav-hidden">
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#miembros">Miembros</a></li>
+            <li><a href="#cuotas">Cuotas Local</a></li>
+            <li><a href="#letras">Letras Canciones</a></li>
+            <li><a href="#partituras">Partituras</a></li>
+            <li><a href="#media">Media</a></li>
+            <li><a href="#ensayo">Ensayo</a></li>
+        </ul>
+    </nav>
+
+    <main id="content">
+        
+        <section id="inicio" class="content-section active">
+            <h2>Celtauro: Gestión Interna</h2>
+            
+            <div class="band-image-container">
+                <img src="concierto-celtauro.png" alt="Celtauro en concierto" class="band-hero-image">
+            </div>
+
+            <p>Bienvenido. Utiliza el menú superior (☰) para navegar por las secciones de gestión del grupo: finanzas, repertorio y ensayos.</p>
+        </section>
+        
+        <section id="miembros" class="content-section">
+            <h2>Miembros de Celtauro</h2>
+            
+            <div id="miembros-list-container" class="data-container">
+                <ul id="miembros-list">
+                    <li>Juanjo (Batería)</li>
+                    <li>Miembro 2 (Instrumento)</li>
+                    <li>Miembro 3 (Instrumento)</li>
+                </ul>
+            </div>
+
+            <div class="button-group">
+                <button id="add-member-btn" class="celtauro-btn primary-btn">Añadir Miembro</button>
+                <button id="remove-member-btn" class="celtauro-btn secondary-btn">Eliminar Miembro</button>
+            </div>
+        </section>
+
+        <section id="cuotas" class="content-section">
+            <h2>Cuotas Local</h2>
+            
+            <div id="cuotas-table-container" class="data-container">
+                <p>Cargando estado de cuotas...</p>
+                </div>
+
+            <div class="button-group" style="margin-top: 40px;">
+                <button id="ingresar-cuota-btn" class="celtauro-btn primary-btn">Ingresar Cuota</button>
+            </div>
+        </section>
+
+        </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
