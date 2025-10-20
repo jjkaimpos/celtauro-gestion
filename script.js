@@ -2,11 +2,10 @@
 // 1. GESTIÓN DEL MENÚ HAMBURGUESA
 // ======================================
 
-const menuToggle = document.getElementById('menu-toggle'); // El botón ☰
-const mainNav = document.getElementById('main-nav'); // El menú completo
-const navLinks = document.querySelectorAll('#main-nav a'); // Todos los enlaces del menú
+const menuToggle = document.getElementById('menu-toggle'); 
+const mainNav = document.getElementById('main-nav'); 
+const navLinks = document.querySelectorAll('#main-nav a'); 
 
-// Al hacer clic en el icono ☰, muestra u oculta el menú.
 menuToggle.addEventListener('click', function() {
     mainNav.classList.toggle('nav-hidden');
 });
@@ -15,24 +14,30 @@ menuToggle.addEventListener('click', function() {
 // 2. GESTIÓN DE CAMBIO DE SECCIONES (SPA Feel)
 // ======================================
 
-// Función para inicializar la carga de datos (se llama al cambiar de sección)
+// Se utiliza para almacenar los datos de cuotas leídos de Google Sheets
+let cuotasData = []; 
+
 function initSectionLoad(targetId) {
     if (targetId === 'cuotas') {
-        loadCuotasData();
+        // Carga los datos solo si no se han cargado antes
+        if (cuotasData.length === 0) {
+            loadCuotasData();
+        } else {
+            // Si ya están cargados, solo muestra el resumen (lista de pendientes)
+            renderCuotasSummary(cuotasData);
+        }
     }
-    // Añadiremos más lógica de carga aquí (ej: 'miembros', 'ensayo') más adelante
 }
 
 
-// Función principal que oculta la sección actual, muestra la nueva y llama a initSectionLoad
 function showSection(targetId) {
-    // 1. Ocultar la sección activa actual (quita la clase 'active')
+    // 1. Ocultar la sección activa actual
     const activeSection = document.querySelector('.content-section.active');
     if (activeSection) {
         activeSection.classList.remove('active');
     }
 
-    // 2. Mostrar la nueva sección (añade la clase 'active')
+    // 2. Mostrar la nueva sección
     const targetSection = document.getElementById(targetId);
     if (targetSection) {
         targetSection.classList.add('active');
@@ -43,7 +48,6 @@ function showSection(targetId) {
 }
 
 
-// 4. Añadir el evento de click a todos los enlaces del menú
 navLinks.forEach(link => {
     link.addEventListener('click', function(event) {
         event.preventDefault(); 
@@ -51,7 +55,6 @@ navLinks.forEach(link => {
         
         showSection(targetId);
         
-        // Oculta el menú hamburguesa después de seleccionar en móvil
         mainNav.classList.add('nav-hidden');
     });
 });
@@ -61,64 +64,96 @@ navLinks.forEach(link => {
 // 3. GESTIÓN DE CUOTAS (CONEXIÓN CON GOOGLE SHEETS)
 // ======================================
 
-// 1. URL CSV DE TU HOJA DE GOOGLE
 const CUOTAS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTf6SEVJ_oWyi5qxO9oy6AXKzyJqv5SwIJIIN1U7ggO-yI2Pbzk4TfVlsTG0Z2ruzGOhnTquavVossX/pub?gid=0&single=true&output=csv';
+const CUOTAS_CONTAINER = document.getElementById('cuotas-full-data-container');
+const PENDING_LIST = document.getElementById('pending-list');
 
-const CUOTAS_CONTAINER = document.getElementById('cuotas-table-container');
 
-// Función que toma el texto CSV y lo renderiza como una tabla HTML
-function renderCuotasTable(csvText) {
-    // 1. Divide el texto en filas y columnas
-    const rows = csvText.trim().split('\n');
-    const tableHTML = document.createElement('table');
-    tableHTML.className = 'cuotas-table'; // Clase para aplicar el estilo CSS
+/**
+ * Convierte el texto CSV plano en un array de objetos JavaScript para un manejo fácil.
+ * @param {string} csvText - El contenido del archivo CSV.
+ * @returns {Array<Object>} Un array de objetos con los datos.
+ */
+function parseCSV(csvText) {
+    const lines = csvText.trim().split('\n');
+    if (lines.length === 0) return [];
+    
+    // Obtiene los encabezados de la primera línea
+    // Utilizamos el mismo método de regex para manejar comas internas si fuera necesario
+    const headerCells = lines[0].match(/(?:[^,"]+|"(?:\\.|[^"])*")+/g);
+    const headers = headerCells.map(h => h.replace(/"/g, '').trim());
 
-    // Usamos una cabecera separada para aplicar estilos
-    const thead = tableHTML.createTHead();
-    const tbody = tableHTML.createTBody();
-
-    rows.forEach((row, index) => {
-        // Expresión regular para separar por comas, manejando celdas con comas internas si fuera necesario
-        const cells = row.match(/(?:[^,"]+|"(?:\\.|[^"])*")+/g);
-
-        if (!cells) return; // Salta filas vacías
-
-        const target = (index === 0) ? thead.insertRow() : tbody.insertRow();
+    const data = [];
+    
+    // Itera sobre el resto de las líneas (filas de datos)
+    for (let i = 1; i < lines.length; i++) {
+        const cells = lines[i].match(/(?:[^,"]+|"(?:\\.|[^"])*")+/g);
+        if (!cells) continue;
         
-        cells.forEach(cellText => {
-            // Limpia las comillas si existen y los espacios al principio/final
-            const cleanText = cellText.replace(/"/g, '').trim();
-
-            let cellElement;
-            if (index === 0) {
-                // Primera fila: Encabezados (<th>)
-                cellElement = document.createElement('th');
-            } else {
-                // Resto de filas: Celdas de datos (<td>)
-                cellElement = target.insertCell();
-                
-                // LÓGICA DE ESTADO (PENDIENTE/PAGADO) para aplicar color
-                if (cleanText.toUpperCase() === 'PENDIENTE') {
-                    cellElement.classList.add('status-pendiente');
-                } else if (cleanText.toUpperCase() === 'PAGADO') {
-                    cellElement.classList.add('status-pagado');
-                }
+        const row = {};
+        cells.forEach((cell, j) => {
+            const cleanCell = cell.replace(/"/g, '').trim();
+            // Asigna el valor de la celda al encabezado correspondiente
+            if (headers[j]) {
+                row[headers[j]] = cleanCell;
             }
-            cellElement.textContent = cleanText;
         });
-    });
-
-    // 2. Insertar la tabla en el contenedor
-    CUOTAS_CONTAINER.innerHTML = ''; // Limpia el mensaje de "Cargando..."
-    CUOTAS_CONTAINER.appendChild(tableHTML);
+        data.push(row);
+    }
+    return data;
 }
 
-// Función principal para cargar y mostrar los datos
+
+/**
+ * Filtra los datos y renderiza un resumen de los pagos pendientes.
+ * @param {Array<Object>} data - El array de datos de cuotas.
+ */
+function renderCuotasSummary(data) {
+    // Meses a considerar (simplificado)
+    const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    let pendingHTML = '';
+    let foundPending = false;
+
+    data.forEach(member => {
+        // Recorremos los meses en la fila del miembro
+        for (const month of MONTHS) {
+            // Comprobamos si la columna del mes existe y es "PENDIENTE"
+            if (member[month] && member[month].toUpperCase() === 'PENDIENTE') {
+                pendingHTML += `<li>${member['Miembro']} - ${month}</li>`;
+                foundPending = true;
+                // Encontrado el primer pendiente, pasamos al siguiente miembro para el resumen
+                break; 
+            }
+        }
+    });
+
+    if (foundPending) {
+        PENDING_LIST.innerHTML = pendingHTML;
+    } else {
+        PENDING_LIST.innerHTML = '<li style="background-color: #2ECC71;">¡Al día! No hay cuotas pendientes.</li>';
+    }
+}
+
+
+// La función que se llama después de leer el CSV
+function renderCuotasTable(csvText) {
+    // 1. Convertir el CSV en datos utilizables (Array de objetos)
+    cuotasData = parseCSV(csvText); 
+    
+    // 2. Mostrar el resumen (lista de pendientes)
+    renderCuotasSummary(cuotasData); 
+    
+    // 3. Renderizar la tabla completa de fondo (oculta al inicio)
+    // Usaremos una función aparte para la tabla completa más adelante
+    CUOTAS_CONTAINER.innerHTML = '<p>Tabla de datos completa cargada y lista para filtrar.</p>';
+}
+
+
 async function loadCuotasData() {
     try {
-        CUOTAS_CONTAINER.innerHTML = '<p>Conectando con Google Sheets...</p>';
-
-        // 2. Lee el archivo CSV
+        PENDING_LIST.innerHTML = '<p>Conectando con Google Sheets...</p>';
+        
         const response = await fetch(CUOTAS_CSV_URL);
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
@@ -126,11 +161,11 @@ async function loadCuotasData() {
         
         const csvText = await response.text();
         
-        // Llama a la función para convertir el texto en tabla
         renderCuotasTable(csvText);
 
     } catch (error) {
         console.error("Fallo al cargar las cuotas:", error);
-        CUOTAS_CONTAINER.innerHTML = '<p style="color: #F94D4D;">❌ Error al cargar los datos. Revisa la URL pública del CSV.</p>';
+        PENDING_LIST.innerHTML = '<p style="color: #F94D4D;">❌ Error al cargar los datos. Revisa la URL pública del CSV.</p>';
+        CUOTAS_CONTAINER.innerHTML = '<p class="hidden">No se pudo cargar la tabla.</p>';
     }
 }

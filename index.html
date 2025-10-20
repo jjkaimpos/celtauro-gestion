@@ -13,7 +13,7 @@
 
     <header id="main-header">
         <div class="logo-container">
-            <img src="Logo.png" alt="Logo Celtauro" class="logo">
+            <img src="logo.png" alt="Logo Celtauro" class="logo">
         </div>
 
         <button id="menu-toggle" class="menu-toggle">
@@ -65,16 +65,48 @@
         <section id="cuotas" class="content-section">
             <h2>Cuotas Local</h2>
             
-            <div id="cuotas-table-container" class="data-container">
-                <p>Cargando estado de cuotas...</p>
+            <div id="cuotas-summary-container" class="data-container">
+                <h3 class="summary-title">Pendientes de Pago Recientes</h3>
+                <ul id="pending-list">
+                    <p>Cargando datos pendientes...</p>
+                </ul>
+            </div>
+
+            <div id="cuotas-full-data-container" class="data-container hidden"> 
                 </div>
 
-            <div class="button-group" style="margin-top: 40px;">
-                <button id="ingresar-cuota-btn" class="celtauro-btn primary-btn">Ingresar Cuota</button>
+            <div class="button-group-triple">
+                <button id="ingresar-cuota-btn" class="celtauro-btn primary-btn triple-btn">Ingresar Cuota</button>
+                <button id="view-paid-btn" class="celtauro-btn secondary-btn triple-btn">Ver Pagadas</button>
+                <button id="view-pending-btn" class="celtauro-btn secondary-btn triple-btn">Ver Pendientes</button>
             </div>
         </section>
 
-        </main>
+        <section id="cuotas" class="content-section">
+            <h2>Cuotas Local</h2>
+        </section>
+
+        <section id="letras" class="content-section">
+            <h2>Letras Canciones</h2>
+            <p>Próximamente...</p>
+        </section>
+        
+        <section id="partituras" class="content-section">
+            <h2>Partituras</h2>
+            <p>Próximamente...</p>
+        </section>
+
+        <section id="media" class="content-section">
+            <h2>Media</h2>
+            <p>Próximamente...</p>
+        </section>
+
+        <section id="ensayo" class="content-section">
+            <h2>Ensayo</h2>
+            <p>Próximamente...</p>
+        </section>
+
+    </main>
     
     <script src="script.js"></script>
 </body>

@@ -32,12 +32,12 @@ body {
 /* 2. CABECERA Y LOGO (Fija en móvil) */
 /* -------------------------------------- */
 #main-header {
-    background-color: #1C2833; /* Un tono aún más oscuro para la cabecera */
+    background-color: #1C2833; 
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px 15px;
-    position: fixed; /* Fija la cabecera al tope de la pantalla */
+    position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
@@ -46,7 +46,7 @@ body {
 }
 
 .logo {
-    max-height: 40px; /* Tamaño del logo en móvil */
+    max-height: 40px; 
     width: auto;
 }
 
@@ -64,7 +64,7 @@ body {
 
 #main-nav {
     position: fixed;
-    top: 60px; /* Justo debajo de la cabecera */
+    top: 60px; 
     left: 0;
     width: 100%;
     background-color: #1C2833; 
@@ -72,7 +72,6 @@ body {
     transition: transform 0.3s ease-in-out;
 }
 
-/* Clase para ocultar el menú por defecto en móvil */
 .nav-hidden {
     transform: translateY(-100%);
 }
@@ -109,14 +108,12 @@ body {
     padding: 15px;
 }
 
-/* ESTO ES LO CRUCIAL: OCULTAR TODAS LAS SECCIONES */
 .content-section {
     display: none; 
     min-height: calc(100vh - 60px); 
     padding-bottom: 50px; 
 }
 
-/* Esta es la única clase que el JavaScript debe añadir para mostrar una sección */
 .content-section.active {
     display: block; 
 }
@@ -134,7 +131,6 @@ body {
     padding: 0 10px;
 }
 
-/* Estilo para la imagen de la página de inicio */
 .band-image-container {
     text-align: center;
     margin: 20px 0;
@@ -146,12 +142,11 @@ body {
     max-width: 500px; 
     height: auto;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(77, 237, 249, 0.5); /* Resaltamos con un brillo turquesa */
+    box-shadow: 0 0 10px rgba(77, 237, 249, 0.5); 
 }
 
-
 /* -------------------------------------- */
-/* 5. ESTILO DE BOTONES Y GRUPOS (MIEMBROS) */
+/* 5. ESTILO DE BOTONES Y GRUPOS (GENERAL) */
 /* -------------------------------------- */
 .button-group {
     display: flex;
@@ -168,12 +163,12 @@ body {
     border: none;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
-    border-radius: 8px; /* Esquinas redondeadas */
+    border-radius: 8px; 
     width: 48%; 
 }
 
 .primary-btn {
-    background-color: var(--color-acento-brillante); /* Turquesa Brillante */
+    background-color: var(--color-acento-brillante); 
     color: var(--color-fondo-principal); 
     box-shadow: 0 4px var(--color-acento-secundario); 
 }
@@ -222,7 +217,7 @@ body {
 }
 
 /* -------------------------------------- */
-/* 7. ESTILO DE TABLA DE CUOTAS (RESPONSIVE) */
+/* 7. ESTILO DE TABLA DE CUOTAS (ANTERIOR) */
 /* -------------------------------------- */
 
 .cuotas-table {
@@ -248,20 +243,64 @@ body {
     font-size: 0.8em;
 }
 
-/* Estilos específicos para los estados de pago */
 .status-pagado {
-    background-color: #2ECC71; /* Verde esmeralda para PAGADO */
+    background-color: #2ECC71; 
     color: var(--color-fondo-principal);
     font-weight: bold;
 }
 
 .status-pendiente {
-    background-color: #E74C3C; /* Rojo ladrillo para PENDIENTE */
+    background-color: #E74C3C; 
     color: var(--color-texto-claro);
     font-weight: bold;
 }
 
-/* Para mejorar la visibilidad de las filas */
 .cuotas-table tr:nth-child(even) {
-    background-color: #2C3E50; /* Alterna el fondo para mejor lectura */
+    background-color: #2C3E50; 
+}
+
+/* -------------------------------------- */
+/* 8. NUEVO ESTILO: TRES BOTONES Y OCULTAR */
+/* -------------------------------------- */
+
+.hidden {
+    display: none !important; /* Clase crucial para ocultar la tabla de datos completa al inicio */
+}
+
+.button-group-triple {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px; 
+    margin-top: 40px;
+    padding: 0 10px;
+}
+
+.triple-btn {
+    width: 31%; 
+    font-size: 0.8em; 
+    padding: 10px 5px;
+}
+
+.summary-title {
+    font-family: var(--font-titulo);
+    color: var(--color-texto-claro);
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Estilo para la lista de pendientes (más limpio) */
+#pending-list {
+    list-style: none;
+    padding: 0;
+}
+
+#pending-list li {
+    background-color: var(--color-fondo-principal);
+    border: 1px solid var(--color-acento-brillante); /* Borde turquesa para destacar */
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
 }
