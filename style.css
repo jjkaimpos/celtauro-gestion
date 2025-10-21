@@ -3,10 +3,10 @@
 /* -------------------------------------- */
 :root {
     /* Paleta de Celtauro */
-    --color-fondo-principal: #2C3E50; 
-    --color-texto-claro: #ECF0F1;     
-    --color-acento-brillante: #4DEDF9; 
-    --color-acento-secundario: #607D8B; 
+    --color-fondo-principal: #2C3E50; /* Gris Acero Oscuro (Fondo) */
+    --color-texto-claro: #ECF0F1;     /* Gris muy claro / Plata (Texto) */
+    --color-acento-brillante: #4DEDF9; /* Turquesa (Acentos/Enlaces) */
+    --color-acento-secundario: #607D8B; /* Gris Azulado (Hover/Botones/Sombra) */
 
     /* Tipografía */
     --font-titulo: 'Cinzel', serif;
@@ -143,4 +143,174 @@ body {
     height: auto;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(77, 237, 249, 0.5); 
+}
+
+/* -------------------------------------- */
+/* 5. ESTILO DE BOTONES Y GRUPOS (GENERAL) */
+/* -------------------------------------- */
+.button-group {
+    display: flex;
+    justify-content: space-around; 
+    margin-top: 25px;
+    padding: 0 15px; 
+}
+
+.celtauro-btn {
+    padding: 12px 15px;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    border-radius: 8px; /* Bordes redondeados */
+    width: 48%; 
+}
+
+.primary-btn {
+    background-color: var(--color-acento-brillante); 
+    color: var(--color-fondo-principal); 
+    box-shadow: 0 4px var(--color-acento-secundario); 
+}
+
+.secondary-btn {
+    background-color: var(--color-acento-secundario); 
+    color: var(--color-texto-claro); 
+    box-shadow: 0 4px #455A64;
+}
+
+.celtauro-btn:active {
+    transform: translateY(2px); 
+    box-shadow: 0 2px #455A64;
+}
+
+/* -------------------------------------- */
+/* 6. ESTILO DE LISTAS DE MIEMBROS */
+/* -------------------------------------- */
+
+#miembros-list {
+    list-style: none; 
+    padding: 0;
+    margin: 20px 0;
+}
+
+#miembros-list li {
+    background-color: #34495E; 
+    border: 1px solid var(--color-acento-secundario); 
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    font-size: 1.1em;
+    position: relative;
+    padding-left: 35px; 
+}
+
+#miembros-list li::before {
+    content: "•"; 
+    color: var(--color-acento-brillante); 
+    font-size: 2em;
+    line-height: 0.5;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* -------------------------------------- */
+/* 7. ESTILOS DE UTILERÍA Y MODALES */
+/* -------------------------------------- */
+
+.hidden {
+    display: none !important; 
+}
+
+/* Estilos de Modales (Ventanas Emergentes) */
+.modal {
+    position: fixed;
+    z-index: 2000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--color-fondo-principal);
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid var(--color-acento-brillante);
+    width: 90%; 
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.modal-content h3 {
+    color: var(--color-acento-brillante);
+    margin-bottom: 20px;
+    font-family: var(--font-titulo);
+    text-align: center;
+}
+
+.close-btn {
+    color: var(--color-texto-claro);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--color-acento-brillante);
+    text-decoration: none;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.modal-content input[type="text"],
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--color-acento-secundario);
+    border-radius: 6px;
+    background-color: #34495E;
+    color: var(--color-texto-claro);
+    font-size: 1em;
+}
+
+.full-width-btn {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.delete-btn {
+    background-color: #E74C3C; /* Rojo para confirmar eliminación */
+    box-shadow: 0 4px #C0392B;
+}
+
+.delete-btn:active {
+    box-shadow: 0 2px #C0392B;
+}
+
+#confirmation-text {
+    text-align: center;
+    color: #F94D4D; /* Rojo de advertencia */
+    margin-top: 15px;
+    font-weight: bold;
 }
