@@ -18,7 +18,7 @@ menuToggle.addEventListener('click', function() {
 
 function initSectionLoad(targetId) {
     if (targetId === 'miembros') {
-        loadMiembrosData(); // Llamamos a la función para cargar los miembros
+        loadMiembrosData(); // Llama a la función para cargar y renderizar los miembros
     }
     // Si hubieran otras secciones, irían aquí (ej: if (targetId === 'cuotas'))
 }
@@ -91,6 +91,7 @@ function renderMiembros() {
 }
 
 function loadMiembrosData() {
+    // Por ahora, solo usamos los datos locales.
     renderMiembros();
 }
 
@@ -188,4 +189,14 @@ document.getElementById('remove-member-form').addEventListener('submit', functio
 document.getElementById('member-select').addEventListener('change', () => {
     document.getElementById('confirmation-text').classList.add('hidden');
     document.getElementById('remove-member-form').querySelector('.delete-btn').textContent = 'Confirmar Eliminación';
+});
+
+
+// Inicializar la primera sección y la carga de datos
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Muestra la sección de inicio al cargar la página.
+    showSection('inicio'); 
+    
+    // 2. Si el usuario navega a Miembros, los datos se cargarán.
+    // Aunque inicie en Inicio, garantizamos que las funciones están listas.
 });
