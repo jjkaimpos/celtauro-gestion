@@ -87,6 +87,40 @@
             <p>Próximamente...</p>
         </section>
 
+<div id="add-member-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Añadir Nuevo Miembro</h3>
+            
+            <form id="add-member-form">
+                <label for="new-member-name">Nombre:</label>
+                <input type="text" id="new-member-name" required>
+
+                <label for="new-member-instrument">Instrumento:</label>
+                <input type="text" id="new-member-instrument" required>
+
+                <button type="submit" class="celtauro-btn primary-btn full-width-btn">Guardar Miembro</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="remove-member-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Eliminar Miembro</h3>
+            
+            <form id="remove-member-form">
+                <label for="member-select">Seleccionar Miembro:</label>
+                <select id="member-select" required>
+                    </select>
+
+                <p id="confirmation-text" class="hidden">¿Estás seguro de que quieres eliminar a este miembro?</p>
+
+                <button type="submit" class="celtauro-btn secondary-btn full-width-btn delete-btn">Confirmar Eliminación</button>
+            </form>
+        </div>
+    </div>
+
     </main>
     
     <script src="script.js"></script>
